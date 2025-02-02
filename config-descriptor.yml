@@ -76,7 +76,7 @@ descriptor:
           default: 0
           min: 0
           label: Max Cycles Count
-          description: Maximum number of cycles. For calculation use https://www.desmos.com/calculator/yrnt694v3h
+          description: Maximum number of cycles. For calculation use [Link to calculator](https://www.desmos.com/calculator/yrnt694v3h)
 
   configTemplate: |
     local sides = require("sides")
