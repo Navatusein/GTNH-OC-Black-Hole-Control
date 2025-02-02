@@ -1,0 +1,127 @@
+descriptor:
+  name: Black Hole Control
+  description: Program for automating crafting in the Pseudostable Black Hole Containment Field
+  repositoryLink: https://github.com/Navatusein/GTNH-OC-Black-Hole-Control
+  fieldGroups:
+    - key: logger
+      name: Logger
+      defaultOpen: true
+      fields:
+        - key: name
+          type: string
+          default: Black Hole Control
+          label: Name
+          description: Name witch will be displayed in discord
+
+        - key: timeZone
+          type: integer
+          default: 3
+          label: Time Zone
+          description: Your time zone
+
+        - key: discordWebhookUrl
+          type: string
+          default: ""
+          optional: true
+          label: Discord Webhook Url
+          description: Discord Webhook Url for notifications
+
+    - key: blackHoleController
+      name: Black Hole Controller
+      defaultOpen: true
+      fields:
+        - key: blackHoleSeedsTransposerAddress
+          type: address
+          label: Black Hole Seeds Transposer Address
+          description: Address of the transposer which provide black hole seeds
+
+        - key: blackHoleSeedInputBusSide
+          type: side
+          default: sides.east
+          label: Black Hole Seed Input Bus Side
+          description: Side of the transposer which connected to seeds input bus
+
+        - key: ioPortTransposerAddress
+          type: address
+          label: IO Port Transposer Address
+          description: Address of the transposer which connected to ME Drive and ME IO Port
+
+        - key: meDriveSide
+          type: side
+          default: sides.east
+          label: ME Drive Side
+          description: Side of the transposer which connected to ME Drive
+
+        - key: meIoPortSide
+          type: side
+          default: sides.west
+          label: ME IO Port Side
+          description: Side of transposer which connected to ME IO Port
+
+        - key: meInterfaceAddress
+          type: address
+          label: ME Interface Address
+          description: Address of ME Interface
+
+        - key: saveRecipeMode
+          type: boolean
+          optional: true
+          default: false
+          class: checkbox
+          label: Save Mode
+          description: Recipe save mode
+
+        - key: maxCyclesCount
+          type: integer
+          default: 0
+          min: 0
+          label: Max Cycles Count
+          description: Maximum number of cycles. For calculation use [Link to calculator](https://www.desmos.com/calculator/yrnt694v3h)
+
+  configTemplate: |
+    local sides = require("sides")
+
+    local loggerLib = require("lib.logger-lib")
+    local discordLoggerHandler = require("lib.logger-handler.discord-logger-handler-lib")
+    local fileLoggerHandler = require("lib.logger-handler.file-logger-handler-lib")
+    local scrollListLoggerHandler = require("lib.logger-handler.scroll-list-logger-handler-lib")
+
+    local blackHoleController = require("src.black-hole-controller")
+
+    local config = {
+      enableAutoUpdate = true, -- Enable auto update on start
+
+      logger = loggerLib:newFormConfig({
+        name = "<field>name</field>",
+        timeZone = <field>timeZone</field>, -- Your time zone
+        handlers = {
+          discordLoggerHandler:newFormConfig({
+            logLevel = "warning",
+            messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
+            discordWebhookUrl = "<field>discordWebhookUrl</field>" -- Discord Webhook URL
+          }),
+          fileLoggerHandler:newFormConfig({
+            logLevel = "info",
+            messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
+            filePath = "logs.log"
+          }),
+          scrollListLoggerHandler:newFormConfig({
+            logLevel = "debug",
+            logsListSize = 32
+          }),
+        }
+      }),
+
+      controller = blackHoleController:newFormConfig({
+        blackHoleSeedsTransposerAddress = "<field>blackHoleSeedsTransposerAddress</field>", -- Address of the transposer which provide black hole seeds.
+        blackHoleSeedInputBusSide = <field>blackHoleSeedInputBusSide</field>, -- Side of the transposer which connected to seeds input bus.
+        ioPortTransposerAddress = "<field>ioPortTransposerAddress</field>", -- Address of the transposer which connected to ME Drive and ME IO Port.
+        meDriveSide = <field>meDriveSide</field>, -- Side of the transposer which connected to ME Drive.
+        meIoPortSide = <field>meIoPortSide</field>, -- Side of the transposer which connected to ME IO Port.
+        meInterfaceAddress = "<field>meInterfaceAddress</field>", -- Address of ME Interface.
+        saveRecipeMode = <field>saveRecipeMode</field>, -- Recipe save mode.
+        maxCyclesCount = <field>maxCyclesCount</field>, -- Maximum number of cycles. For calculation use: https://www.desmos.com/calculator/yrnt694v3h
+      })
+    }
+
+    return config

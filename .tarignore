@@ -1,0 +1,9 @@
+.tarignore
+.gitignore
+config-descriptor.yml
+.github/
+.git/
+docs/
+*.md
+*.png
+*.zip
