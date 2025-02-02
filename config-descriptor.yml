@@ -1,0 +1,126 @@
+descriptor:
+  name: God Forge Control
+  description: Program for automating the production of Degenerate Quark Gluon Plasma and Molten Magmatter
+  repositoryLink: https://github.com/Navatusein/GTNH-OC-God-Forge-Control
+  fieldGroups:
+    - key: logger
+      name: Logger
+      defaultOpen: true
+      fields:
+        - key: name
+          type: string
+          default: God Forge Control
+          label: Name
+          description: Name witch will be displayed in discord
+
+        - key: timeZone
+          type: integer
+          default: 3
+          label: Time Zone
+          description: Your time zone
+
+        - key: discordWebhookUrl
+          type: string
+          default: ""
+          optional: true
+          label: Discord Webhook Url
+          description: Discord Webhook Url for notifications
+
+    - key: heliofusionExoticizerController
+      name: Heliofusion Exoticizer Controller
+      defaultOpen: true
+      fields:
+        - key: magmatterMode
+          type: boolean
+          optional: true
+          default: false
+          class: checkbox
+          label: Enable Magmatter Mode
+          description: Enable mode of production magmatter
+
+        - key: outputMeInterfaceAddress
+          type: address
+          label: Output ME Interface Address
+          description: Address of me interface which connected to output AE
+
+        - key: inputMeInterfaceAddress
+          type: address
+          label: Input ME Interface Address
+          description: Address of me interface which connected to input AE
+
+        - key: transposerAddress
+          type: address
+          label: Transposer Address
+          description: Address of transposer
+
+        - key: meIoPortSide
+          type: side
+          default: sides.south
+          label: ME IO Port Side
+          description: Side of the transposer which connected to input AE ME IO Port
+
+        - key: meDriveSide
+          type: side
+          default: sides.north
+          label: ME Drive Side
+          description: Side of the transposer which connected to output AE ME Drive
+
+        - key: redstoneIoAddress
+          type: address
+          label: Redstone Address
+          description: Address of the Redstone I/O
+
+        - key: redstoneIoSide
+          type: side
+          default: sides.west
+          label: Redstone IO Side
+          description: Side of the redstone IO which connected to ME Level Emitter or other controller
+
+  configTemplate: |
+    local sides = require("sides")
+
+    local loggerLib = require("lib.logger-lib")
+    local discordLoggerHandler = require("lib.logger-handler.discord-logger-handler-lib")
+    local fileLoggerHandler = require("lib.logger-handler.file-logger-handler-lib")
+    local scrollListLoggerHandler = require("lib.logger-handler.scroll-list-logger-handler-lib")
+
+    local heliofusionExoticizerController = require("src.heliofusion-exoticizer-controller")
+
+    local config = {
+      enableAutoUpdate = true, -- Enable auto update on start
+
+      logger = loggerLib:newFormConfig({
+        name = "<field>name</field>",
+        timeZone = <field>timeZone</field>, -- Your time zone
+        handlers = {
+          discordLoggerHandler:newFormConfig({
+            logLevel = "warning",
+            messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
+            discordWebhookUrl = "<field>discordWebhookUrl</field>" -- Discord Webhook URL
+          }),
+          fileLoggerHandler:newFormConfig({
+            logLevel = "info",
+            messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
+            filePath = "logs.log"
+          }),
+          scrollListLoggerHandler:newFormConfig({
+            logLevel = "debug",
+            logsListSize = 32
+          }),
+        }
+      }),
+
+
+      controller = heliofusionExoticizerController:newFormConfig({
+        magmatterMode = <field>magmatterMode</field>, -- Enable mode of production magmatter.
+        outputMeInterfaceAddress = "<field>outputMeInterfaceAddress</field>", -- Address of me interface which connected to output AE.
+        inputMeInterfaceAddress = "<field>inputMeInterfaceAddress</field>", -- Address of me interface which connected to input AE.
+        transposerAddress = "<field>transposerAddress</field>", -- Address of transposer.
+        meIoPortSide = <field>meIoPortSide</field>, -- Side of the transposer which connected to input AE ME IO Port.
+        meDriveSide = <field>meDriveSide</field>, -- Side of the transposer which connected to output AE ME Drive.
+        redstoneIoAddress = "<field>redstoneIoAddress</field>", -- Redstone IO Address.
+        redstoneIoSide = <field>redstoneIoSide</field> -- Side of the redstone IO which connected to ME Level Emitter or other controller.
+      })
+    }
+
+    return config
