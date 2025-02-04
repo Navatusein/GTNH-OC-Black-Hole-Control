@@ -93,6 +93,8 @@ function blackHoleController:new(
 
     self.stateMachine.data.spaceTimePerCraftCount = self:calculateSpaceTimeCount(self.maxCyclesCount)
 
+    event.push("log_info", "Required Space Time: "..numWithCommas(self.stateMachine.data.spaceTimePerCraftCount));
+
     self.stateMachine.states.idle = self.stateMachine:createState("Idle")
     self.stateMachine.states.idle.init = function()
       self.stateMachine.data.startTime = nil
@@ -104,7 +106,6 @@ function blackHoleController:new(
 
       if self.saveRecipeMode == true or self.maxCyclesCount ~= 0 then
         self:removeExcessSpacetime()
-        event.push("log_info", "Required Space Time: "..numWithCommas(self.stateMachine.data.spaceTimePerCraftCount));
       end
     end
     self.stateMachine.states.idle.update = function()
