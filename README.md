@@ -170,7 +170,7 @@ In the `maxCyclesCount` field you specify number of spacetime addition cycles. E
 
 > [!CAUTION]
 > For a stable “Superdense Magnetohydrodynamically Constrained Star Matter Plate” 
-> craft, specify 27 cycles in the `maxCyclesCount` field
+> craft, specify 27 cycles in the `maxCyclesCount` field.
 
 
 ```lua
