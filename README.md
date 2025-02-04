@@ -168,6 +168,11 @@ In the `saveRecipeMode` field you specify enable save recipe mode that will add 
 
 In the `maxCyclesCount` field you specify number of spacetime addition cycles. Each cycle is 30 seconds. Use the calculator to calculate consumption. [Link to calculator](https://www.desmos.com/calculator/yrnt694v3h)
 
+> [!CAUTION]
+> For a stable “Superdense Magnetohydrodynamically Constrained Star Matter Plate” 
+> craft, specify 27 cycles in the `maxCyclesCount` field
+
+
 ```lua
   controller = blackHoleController:newFormConfig({
     blackHoleSeedsTransposerAddress = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", -- Address of transposer which provide black hole seeds.
