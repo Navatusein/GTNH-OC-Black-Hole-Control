@@ -14,6 +14,8 @@
 The program is designed to automate Black Hole. The program is able to add Space Time 
 to keep the stability, also has Save Recipe Mode which will add just the right 
 amount of spacetime to keep the recipe from being voided.
+It is also possible to send messages to Discord about out of service situations.
+And there is also the possibility of auto update at startup.
 
 #### Controls
 
