@@ -110,6 +110,8 @@ Also, the black hole controller must be connected via MFU to the adapter.
 
 ![Controller mfu](/docs/controller-mfu.png)
 
+<a id="configuration"></a>
+
 ## Configuration
 
 > [!NOTE]  
