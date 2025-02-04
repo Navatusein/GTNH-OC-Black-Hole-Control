@@ -53,7 +53,7 @@ Then run the command to start the installer.
 pastebin run ESUAMAGx
 ``` 
 
-Then select the Black Hole Control  program in the installer.
+Then select the Black Hole Control program in the installer.
 If you wish you can add the program to auto download, for manual start write a command.
 
 ```shell
