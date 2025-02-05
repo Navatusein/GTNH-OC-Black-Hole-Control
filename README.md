@@ -76,6 +76,8 @@ main
 >
 > <img src="docs/analyzer.png" alt="Analyzer" width="120"/>
 
+<br/>
+
 To build a setup, you will need:
 
 - Transposer: 2
