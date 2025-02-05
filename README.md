@@ -70,6 +70,14 @@ main
 
 ## Setup
 
+> [!NOTE]  
+> For easy copying of addresses, use "Analyzer" from the OpenComputers mod. Right-click on the component, its address will be written in the chat. 
+> If you click on it, it will be copied.
+>
+> <img src="docs/analyzer.png" alt="Analyzer" width="120"/>
+
+<br/>
+
 To build a setup, you will need:
 
 - Transposer: 2
@@ -77,15 +85,15 @@ To build a setup, you will need:
 - MFU: 2
 - Database: 1
 
-You need to make a separate subnet for this set-up further than the black hole subnet (It is red in the diagrams). 
-It should see Space Time from the main network (It is green in the diagrams), it should also contain 
+You need to make a separate subnet for this set-up further than the black hole subnet (It is red in the pictures). 
+It should see Space Time from the main network (It is green in the pictures), it should also contain 
 “Fluid Discretizer” and CPU with “Crafting Monitor”. The number of CPUs is 
 equal to the number of black holes connected to the subnet.
 
 ![Black hole subnet setup](/docs/black-hole-subnet.png)
 
 To add a Space Time, you need to make one more mini subnet further than the input subnet 
-(It is purple on the diagram). The program adds a Space Time by ordering a fake recipe. 
+(It is purple on the pictures). The program adds a Space Time by ordering a fake recipe. 
 This is done because there is no easier way to add a large number of Space Time. 
 The mini subsystem consists of: “ME Dual Interface”, ‘ME Drive’, 
 ‘Stocking Input Hatch (ME)’. In the “ME Drive” you need to put a fluid cell. 
