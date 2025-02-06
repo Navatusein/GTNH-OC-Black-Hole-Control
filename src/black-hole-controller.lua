@@ -130,8 +130,7 @@ function blackHoleController:new(
       self:openBlackHole()
     end
     self.stateMachine.states.openBlackHole.update = function()
-
-      if self.ioPortTransposer.getSlotStackSize(self.meIoPortSide, 7) == 0 then
+      if self.blackHoleSeedsTransposerProxy.getSlotStackSize(self.blackHoleSeedInputBusSide, 1) == 0 then
         self.stateMachine.data.startTime = computer.uptime() - 1
         self.stateMachine.data.currentCycle = 0
         self.stateMachine:setState(self.stateMachine.states.waitFreeCraft)
