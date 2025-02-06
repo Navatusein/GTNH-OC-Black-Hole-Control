@@ -1,7 +1,7 @@
 -- List Lib
 -- Author: Navatusein
 -- License: MIT
--- Version: 1.3
+-- Version: 1.4
 
 ---@class ListConfig
 ---@field maxSize number|nil
@@ -58,8 +58,8 @@ function list:new(maxSize)
 
   ---Clear list
   function obj:clear()
-    for _, _ in ipairs(self.list) do
-      self:popBack()
+    for _ = 1, #self.list, 1 do
+      table.remove(self.list)
     end
   end
 
