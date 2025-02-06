@@ -17,8 +17,11 @@ local componentDiscoverLib = require("lib.component-discover-lib")
 
 local blackHoleController = {}
 
-local function numWithCommas(n)
-  return tostring(math.floor(n)):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$","%1"):reverse()
+---Convert number to string with commas
+---@param number number
+---@return string
+local function numWithCommas(number)
+  return tostring(math.floor(number)):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$","%1"):reverse()
 end
 
 ---Crate new BlackHoleController object from config
@@ -93,8 +96,6 @@ function blackHoleController:new(
 
     self.stateMachine.data.spaceTimePerCraftCount = self:calculateSpaceTimeCount(self.maxCyclesCount)
 
-    event.push("log_info", "Required Space Time: "..numWithCommas(self.stateMachine.data.spaceTimePerCraftCount));
-
     self.stateMachine.states.idle = self.stateMachine:createState("Idle")
     self.stateMachine.states.idle.init = function()
       self.stateMachine.data.startTime = nil
@@ -129,8 +130,8 @@ function blackHoleController:new(
       self:openBlackHole()
     end
     self.stateMachine.states.openBlackHole.update = function()
-      if self.controllerProxy.isMachineActive() then
-        self.stateMachine.data.startTime = computer.uptime() - 2
+      if self.blackHoleSeedsTransposerProxy.getSlotStackSize(self.blackHoleSeedInputBusSide, 1) == 0 then
+        self.stateMachine.data.startTime = computer.uptime() - 1
         self.stateMachine.data.currentCycle = 0
         self.stateMachine:setState(self.stateMachine.states.waitFreeCraft)
       end
@@ -440,7 +441,7 @@ function blackHoleController:new(
   function obj:calculateSpaceTimeByCycleCount(cycle, time)
     time = time or 30
 
-    return time * 2 ^ (cycle - 1)
+    return math.ceil(time * 2 ^ (cycle - 1))
   end
 
   ---Calculates space time consumption for cycles
@@ -457,7 +458,7 @@ function blackHoleController:new(
       count = count + self:calculateSpaceTimeByCycleCount(i)
     end
 
-    return count
+    return math.ceil(count)
   end
 
   ---Encode fake pattern
