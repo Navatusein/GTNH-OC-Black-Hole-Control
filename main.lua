@@ -17,11 +17,11 @@ local program = programLib:new(config.logger, config.enableAutoUpdate, version, 
 local gui = guiLib:new(program)
 
 local logo = {
-" ____  _            _      _   _       _         ____            _             _ ",
-"| __ )| | __ _  ___| | __ | | | | ___ | | ___   / ___|___  _ __ | |_ _ __ ___ | |",
-"|  _ \\| |/ _` |/ __| |/ / | |_| |/ _ \\| |/ _ \\ | |   / _ \\| '_ \\| __| '__/ _ \\| |",
-"| |_) | | (_| | (__|   <  |  _  | (_) | |  __/ | |__| (_) | | | | |_| | | (_) | |",
-"|____/|_|\\__,_|\\___|_|\\_\\ |_| |_|\\___/|_|\\___|  \\____\\___/|_| |_|\\__|_|  \\___/|_|"
+  " ____  _            _      _   _       _         ____            _             _ ",
+  "| __ )| | __ _  ___| | __ | | | | ___ | | ___   / ___|___  _ __ | |_ _ __ ___ | |",
+  "|  _ \\| |/ _` |/ __| |/ / | |_| |/ _ \\| |/ _ \\ | |   / _ \\| '_ \\| __| '__/ _ \\| |",
+  "| |_) | | (_| | (__|   <  |  _  | (_) | |  __/ | |__| (_) | | | | |_| | | (_) | |",
+  "|____/|_|\\__,_|\\___|_|\\_\\ |_| |_|\\___/|_|\\___|  \\____\\___/|_| |_|\\__|_|  \\___/|_|"
 }
 
 local mainTemplate = {
@@ -33,6 +33,7 @@ local mainTemplate = {
   },
   lines = {
     "Status: $state$",
+    "Require Space Time: $spaceTimePerCraftCount:n,%0.f$",
     "Timer: $currentTimer$ ($currentCycleTimer$)",
     "Cycle: $currentCycle$",
     "",
@@ -73,6 +74,7 @@ local function guiLoop()
   gui:render({
     state = config.controller.stateMachine.currentState ~= nil and config.controller.stateMachine.currentState.name or "nil",
     logs = config.logger.handlers[3]["logs"].list,
+    spaceTimePerCraftCount = config.controller.stateMachine.data.spaceTimePerCraftCount,
     currentTimer = currentTimer,
     currentCycleTimer = currentCycleTimer,
     currentCycle = currentCycle
