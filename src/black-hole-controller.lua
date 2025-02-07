@@ -110,17 +110,19 @@ function blackHoleController:new(
       end
     end
     self.stateMachine.states.idle.update = function()
-      if self:hasItems() == true and self.controllerProxy.isWorkAllowed() then
-        if self:hasSeeds() == true then
-          if self:hasEnoughSpacetime(self.stateMachine.data.spaceTimePerCraftCount) then
-            self.stateMachine:setState(self.stateMachine.states.openBlackHole)
-            return
-          elseif self.stateMachine.data.notifyNotEnoughSpaceTime == false then
-            self.stateMachine.data.notifyNotEnoughSpaceTime = true
-            event.push("log_warning", "Not enough Space Time for craft. Need: "..numWithCommas(self.stateMachine.data.spaceTimePerCraftCount))
-          end
+      if self.controllerProxy.getWorkMaxProgress() == 0 then
+        if self:hasItems() == true and self.controllerProxy.isWorkAllowed() then
+          if self:hasSeeds() == true then
+            if self:hasEnoughSpacetime(self.stateMachine.data.spaceTimePerCraftCount) then
+              self.stateMachine:setState(self.stateMachine.states.openBlackHole)
+              return
+            elseif self.stateMachine.data.notifyNotEnoughSpaceTime == false then
+              self.stateMachine.data.notifyNotEnoughSpaceTime = true
+              event.push("log_warning", "Not enough Space Time for craft. Need: "..numWithCommas(self.stateMachine.data.spaceTimePerCraftCount))
+            end
 
-          os.sleep(3)
+            os.sleep(3)
+          end
         end
       end
     end
@@ -230,8 +232,11 @@ function blackHoleController:new(
     self.stateMachine.states.collapseBlackHole = self.stateMachine:createState("Collapse Black Hole")
     self.stateMachine.states.collapseBlackHole.init = function()
       self:collapseBlackHole()
+      self.stateMachine:setState(self.stateMachine.states.waitEnd)
     end
-    self.stateMachine.states.collapseBlackHole.update = function()
+
+    self.stateMachine.states.waitEnd = self.stateMachine:createState("Wait end")
+    self.stateMachine.states.waitEnd.update = function()
       if self.controllerProxy.getWorkMaxProgress() == 0 then
         self.stateMachine:setState(self.stateMachine.states.idle)
       end
@@ -239,6 +244,11 @@ function blackHoleController:new(
 
     self.stateMachine.states.error = self.stateMachine:createState("Error")
     self.stateMachine.states.error.init = function()
+      self:collapseBlackHole()
+
+      self.stateMachine.data.startTime = nil
+      self.stateMachine.data.cycleStartTime = nil
+
       while self:tryCancelFakeRecipe() == false do
         os.sleep(0.1)
       end
@@ -268,7 +278,7 @@ function blackHoleController:new(
   --Reset error
   function obj:resetError()
     if self.stateMachine.currentState == self.stateMachine.states.error then
-      self.stateMachine:setState(self.stateMachine.states.idle)
+      self.stateMachine:setState(self.stateMachine.states.waitEnd)
     end
   end
 
