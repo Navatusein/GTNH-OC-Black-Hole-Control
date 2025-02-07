@@ -50,7 +50,6 @@ local mainTemplate = {
     "#logsScrollList#",
     "#logsScrollList#",
     "#logsScrollList#",
-    "#logsScrollList#",
     "#logsScrollList#"
   }
 }
