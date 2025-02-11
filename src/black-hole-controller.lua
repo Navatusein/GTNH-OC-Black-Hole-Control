@@ -179,19 +179,15 @@ function blackHoleController:new(
 
     self.stateMachine.states.waitSpaceTime = self.stateMachine:createState("Wait Space Time")
     self.stateMachine.states.waitSpaceTime.update = function ()
-      if self.controllerProxy.getWorkMaxProgress() == 0 then
-        if self:hasItems() == false then
+      if self.controllerProxy.getWorkMaxProgress() == 0 and self:hasItems() == false then
           self.stateMachine:setState(self.stateMachine.states.collapseBlackHole)
-        end
       elseif self.stateMachine.data.currentCycleTimer >= self.maxCycleTimer or self.stateMachine.data.currentCycle == self.maxCyclesCount then
         if self.stateMachine.data.currentCycle < self.maxCyclesCount then
           self.stateMachine:setState(self.stateMachine.states.addSpaceTime)
+        elseif self.saveRecipeMode == true and self:getCraftTimeRemained() > self:getStabilityTimeRemained() then
+          self.stateMachine:setState(self.stateMachine.states.saveRecipe)
         else
-          if self.saveRecipeMode == true and self:getCraftTimeRemained() > self:getStabilityTimeRemained() then
-            self.stateMachine:setState(self.stateMachine.states.saveRecipe)
-          else
-            self.stateMachine:setState(self.stateMachine.states.collapseBlackHole)
-          end
+          self.stateMachine:setState(self.stateMachine.states.collapseBlackHole)
         end
       end
     end

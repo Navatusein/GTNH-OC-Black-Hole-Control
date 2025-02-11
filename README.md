@@ -108,7 +108,8 @@ the Space Time residue into the black hole subsystem.
 You should also put “Database Upgrade (Tier 3)” in the adapter.
 
 > [!CAUTION]
-> To work properly, you need to put any liquid сraft template (which is pink) in the interface.
+> To work properly, you need to put any liquid сraft template (which is pink) in the interface. 
+> The program will re-encode it itself.
 
 ![Input subnet setup](/docs/input-subnet.png)
 
