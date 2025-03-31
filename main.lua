@@ -106,7 +106,7 @@ end
 program:registerLogo(logo)
 program:registerInit(init)
 program:registerThread(loop)
-program:registerTimer(guiLoop, math.huge)
+program:registerTimer(guiLoop, math.huge, 1)
 program:registerKeyHandler(keyboard.keys.enter, errorButtonHandler)
 program:registerKeyHandler(keyboard.keys.d, dump)
 program:registerKeyHandler(keyboard.keys.delete, clearErrorList)
