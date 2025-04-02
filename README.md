@@ -84,6 +84,10 @@ main
 
 <br/>
 
+> [!NOTE]  
+> There's a save of the world with a setup of black hole. Game version 2.7.3
+> [Save](https://github.com/Navatusein/GTNH-OC-Black-Hole-Control/raw/main/black-hole-world.zip)
+
 To build a setup, you will need:
 
 - Transposer: 2
