@@ -101,7 +101,7 @@ It should see Space Time from the main network (It is green in the pictures), it
 equal to the number of black holes connected to the subnet.
 
 > [!CAUTION]
-> To work, all CPUs must be equipped with Crafting Monitor
+> To work, all CPUs must be equipped with a “Crafting Monitor“
 
 ![Black hole subnet setup](/docs/black-hole-subnet.png)
 
