@@ -100,6 +100,9 @@ It should see Space Time from the main network (It is green in the pictures), it
 “Fluid Discretizer” and CPU with “Crafting Monitor”. The number of CPUs is 
 equal to the number of black holes connected to the subnet.
 
+> [!CAUTION]
+> To work, all CPUs must be equipped with Crafting Monitor
+
 ![Black hole subnet setup](/docs/black-hole-subnet.png)
 
 To add a Space Time, you need to make one more mini subnet further than the input subnet 
