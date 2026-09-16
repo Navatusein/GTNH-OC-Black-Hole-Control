@@ -1,12 +1,14 @@
 descriptor:
-  name: Black Hole Control
-  key: black-hole-control-2.8
-  currentVersion: 2.8
+  name: Black Hole Control for 2.9+
+  key: black-hole-control-2.9
+  currentVersion: 2.9+
   description: Program for automating crafting in the Pseudostable Black Hole Containment Field
   repositoryLink: https://github.com/Navatusein/GTNH-OC-Black-Hole-Control
   versions:
     - name: 2.8
       url: "https://raw.githubusercontent.com/Navatusein/GTNH-OC-Black-Hole-Control/refs/heads/main/config-descriptor.yml"
+    - name: 2.9+
+      url: "https://raw.githubusercontent.com/Navatusein/GTNH-OC-Black-Hole-Control/refs/heads/develop/config-descriptor.yml"
   fieldGroups:
     - key: logger
       name: Logger
