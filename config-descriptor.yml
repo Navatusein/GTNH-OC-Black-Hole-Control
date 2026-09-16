@@ -86,38 +86,34 @@ descriptor:
   configTemplate: |
     local sides = require("sides")
 
-    local loggerLib = require("lib.logger-lib")
-    local discordLoggerHandler = require("lib.logger-handler.discord-logger-handler-lib")
-    local fileLoggerHandler = require("lib.logger-handler.file-logger-handler-lib")
-    local scrollListLoggerHandler = require("lib.logger-handler.scroll-list-logger-handler-lib")
-
-    local blackHoleController = require("src.black-hole-controller")
-
     local config = {
       enableAutoUpdate = true, -- Enable auto update on start
 
-      logger = loggerLib:newFormConfig({
+      logger = {
         name = "<field>name</field>",
         timeZone = <field>timeZone</field>, -- Your time zone
         handlers = {
-          discordLoggerHandler:newFormConfig({
+          ["discord"] = {
+            type = "discord",
             logLevel = "warning",
             messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
             discordWebhookUrl = "<field>discordWebhookUrl</field>" -- Discord Webhook URL
-          }),
-          fileLoggerHandler:newFormConfig({
+          },
+          ["file"] = {
+            type = "file",
             logLevel = "info",
             messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
             filePath = "logs.log"
-          }),
-          scrollListLoggerHandler:newFormConfig({
+          },
+          ["scrollList"] = {
+            type = "scrollList",
             logLevel = "debug",
             logsListSize = 32
-          }),
+          },
         }
-      }),
+      },
 
-      controller = blackHoleController:newFormConfig({
+      controller = {
         blackHoleSeedsTransposerAddress = "<field>blackHoleSeedsTransposerAddress</field>", -- Address of the transposer which provide black hole seeds.
         blackHoleSeedInputBusSide = <field>blackHoleSeedInputBusSide</field>, -- Side of the transposer which connected to seeds input bus.
         ioPortTransposerAddress = "<field>ioPortTransposerAddress</field>", -- Address of the transposer which connected to ME Drive and ME IO Port.
@@ -126,7 +122,7 @@ descriptor:
         meInterfaceAddress = "<field>meInterfaceAddress</field>", -- Address of ME Interface.
         saveRecipeMode = <field>saveRecipeMode</field>, -- Recipe save mode.
         maxCyclesCount = <field>maxCyclesCount</field>, -- Maximum number of cycles. For calculation use: https://www.desmos.com/calculator/yrnt694v3h
-      })
+      }
     }
 
     return config

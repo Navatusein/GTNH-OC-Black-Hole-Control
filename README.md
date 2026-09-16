@@ -70,7 +70,7 @@ main
 
 > [!NOTE]  
 > For convenient configuration you can use the web configurator.
-> [GTNH-OC-Web-Configurator](https://navatusein.github.io/GTNH-OC-Web-Configurator/#/configurator?url=https%3A%2F%2Fraw.githubusercontent.com%2FNavatusein%2FGTNH-OC-Black-Hole-Control%2Fmain%2Fconfig-descriptor.yml)
+> [GTNH-OC-Web-Configurator](https://navatusein.github.io/GTNH-OC-Web-Configurator/#/configurator?url=https%3A%2F%2Fraw.githubusercontent.com%2FNavatusein%2FGTNH-OC-Black-Hole-Control%2Frefs%2Fheads%2Fdevelop%2Fconfig-descriptor.yml)
 
 <a id="setup"></a>
 
@@ -140,7 +140,7 @@ Also, the black hole controller must be connected via MFU to the adapter.
 
 > [!NOTE]  
 > For convenient configuration you can use the web configurator.
-> [GTNH-OC-Web-Configurator](https://navatusein.github.io/GTNH-OC-Web-Configurator/#/configurator?url=https%3A%2F%2Fraw.githubusercontent.com%2FNavatusein%2FGTNH-OC-Black-Hole-Control%2Fmain%2Fconfig-descriptor.yml)
+> [GTNH-OC-Web-Configurator](https://navatusein.github.io/GTNH-OC-Web-Configurator/#/configurator?url=https%3A%2F%2Fraw.githubusercontent.com%2FNavatusein%2FGTNH-OC-Black-Hole-Control%2Frefs%2Fheads%2Fdevelop%2Fconfig-descriptor.yml)
 
 General configuration in file `config.lua`
 
@@ -156,26 +156,29 @@ In the `discordWebhookUrl` field, you can specify the Discord Webhook link so th
 [How to Create a Discord Webhook?](https://www.svix.com/resources/guides/how-to-make-webhook-discord/)
 
 ```lua
-logger = loggerLib:newFormConfig({
+logger = {
   name = "Black Hole Control",
   timeZone = 3, -- Your time zone
   handlers = {
-    discordLoggerHandler:newFormConfig({
+    ["discord"] = {
+      type = "discord",
       logLevel = "warning",
       messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
       discordWebhookUrl = "" -- Discord Webhook URL
-    }),
-    fileLoggerHandler:newFormConfig({
+    },
+    ["file"] = {
+      type = "file",
       logLevel = "info",
       messageFormat = "{Time:%d.%m.%Y %H:%M:%S} [{LogLevel}]: {Message}",
       filePath = "logs.log"
-    }),
-    scrollListLoggerHandler:newFormConfig({
+    },
+    ["scrollList"] = {
+      type = "scrollList",
       logLevel = "debug",
       logsListSize = 32
-    }),
+    },
   }
-}),
+},
 ```
 
 In the `blackHoleSeedsTransposerAddress` field you specify address of the transposer witch provide black hole seeds.
@@ -200,7 +203,7 @@ In the `maxCyclesCount` field you specify number of spacetime addition cycles. E
 
 
 ```lua
-  controller = blackHoleController:newFormConfig({
+  controller = {
     blackHoleSeedsTransposerAddress = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", -- Address of transposer which provide black hole seeds.
     blackHoleSeedInputBusSide = sides.south, -- Side of transposer which connected to seeds input bus.
     ioPortTransposerAddress = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", -- Address of transposer which connected to ME Drive and ME IO Port.
@@ -209,5 +212,5 @@ In the `maxCyclesCount` field you specify number of spacetime addition cycles. E
     meInterfaceAddress = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", -- Address of ME Interface.
     saveRecipeMode = true, -- Recipe save mode.
     maxCyclesCount = 0, -- Maximum number of cycles. For calculation use: https://www.desmos.com/calculator/yrnt694v3h
-  })
+  }
 ```

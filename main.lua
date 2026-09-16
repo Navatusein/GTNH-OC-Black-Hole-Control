@@ -1,20 +1,24 @@
 local keyboard = require("keyboard")
 
-local programLib = require("lib.program-lib")
-local guiLib = require("lib.gui-lib")
+local configManager = require("lib.config-manager.index")
+local programController = require("lib.program-controller.index")
+local simpleGui = require("lib.simple-gui.index")
 
-local scrollList = require("lib.gui-widgets.scroll-list")
+local configTemplate = require("src.config-template")
+local scrollList = require("src.gui-widgets.scroll-list")
 
 package.loaded.config = nil
 local config = require("config")
-
 local version = require("version")
+
+---@type Config
+local config = configManager.manager:new(configTemplate):build(config)
 
 local repository = "Navatusein/GTNH-OC-Black-Hole-Control"
 local archiveName = "BlackHoleControl"
 
-local program = programLib:new(config.logger, config.enableAutoUpdate, version, repository, archiveName)
-local gui = guiLib:new(program)
+local program = programController.program:new(config.enableAutoUpdate, version, repository, archiveName)
+local gui = simpleGui.gui:new(program)
 
 local logo = {
   " ____  _            _      _   _       _         ____            _             _ ",
@@ -29,11 +33,11 @@ local mainTemplate = {
   background = gui.palette.black,
   foreground = gui.palette.white,
   widgets = {
-    logsScrollList = scrollList:new("logsScrollList", "logs", keyboard.keys.up, keyboard.keys.down)
+    logsScrollList = scrollList:new("logs", keyboard.keys.up, keyboard.keys.down)
   },
   lines = {
     "Status: $state$",
-    "Require Space Time: $spaceTimePerCraftCount:n,%0.f$",
+    "Require Space Time: $spaceTimePerCraftCount:n,,%0.f$",
     "Timer: $currentTimer$ ($currentCycleTimer$)",
     "Cycle: $currentCycle$",
     "",
@@ -56,7 +60,6 @@ local mainTemplate = {
 
 local function init()
   gui:setTemplate(mainTemplate)
-  os.sleep(0.1)
   config.controller:init()
 end
 
@@ -68,11 +71,11 @@ local function loop()
 end
 
 local function guiLoop()
-  local currentTimer, currentCycleTimer, currentCycle = config.controller:getState()
+  local currentTimer, currentCycleTimer, currentCycle = config.controller:getTimers()
 
   gui:render({
-    state = config.controller.stateMachine.currentState ~= nil and config.controller.stateMachine.currentState.name or "nil",
-    logs = config.logger.handlers[3]["logs"].list,
+    state = config.controller:getCurrentState(),
+    logs = config.logger.handlers["scrollList"]:getLogs(),
     spaceTimePerCraftCount = config.controller.stateMachine.data.spaceTimePerCraftCount,
     currentTimer = currentTimer,
     currentCycleTimer = currentCycleTimer,
@@ -86,25 +89,26 @@ end
 
 local function clearErrorList()
   ---@type ScrollListLoggerHandler|LoggerHandler
-  local logger = config.logger.handlers[3]
-  logger:clearList()
+  local logger = config.logger.handlers["scrollList"]
+  logger:clearLogs()
 end
 
 local function dump()
   ---@type ScrollListLoggerHandler|LoggerHandler
-  local logger = config.logger.handlers[3]
+  local logger = config.logger.handlers["scrollList"]
 
+  local logs = logger:getLogs()
   local file = assert(io.open("debug-logs.txt", "w"))
 
-  for i = 1, #logger.logs.list, 1 do
-    file:write(logger.logs.list[i].."\n")
+  for i = 1, #logs, 1 do
+    file:write(logs[i].."\n")
   end
 
   file:close()
 end
 
 program:registerLogo(logo)
-program:registerInit(init)
+program:registerOnInit(init)
 program:registerThread(loop)
 program:registerTimer(guiLoop, math.huge, 1)
 program:registerKeyHandler(keyboard.keys.enter, errorButtonHandler)
