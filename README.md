@@ -1,5 +1,8 @@
 # GTNH-OC-Black-Hole-Control 
 
+> [!CAUTION]
+> For GTNH version 2.9+, the update is currently in beta testing. Instructions for this version can be found by following [link](https://github.com/Navatusein/GTNH-OC-Black-Hole-Control/tree/develop)
+
 ## Content
 
 - [Information](#information)
